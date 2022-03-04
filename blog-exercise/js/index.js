@@ -8,6 +8,10 @@ const searchForm = document.querySelector(".search")
  */
 async function renderPosts(searchTerm) { //todo
 
+    const response = await fetch("/posts");
+    const posts = await response.json();
+
+    for (const post of posts) {
         const postNode = document.createElement("article")
         postNode.classList.add("post")
 
@@ -21,7 +25,7 @@ async function renderPosts(searchTerm) { //todo
 
         postNode.querySelector(".delete").addEventListener("click", () => deletePost(post.id))
         container.appendChild(postNode)
-
+    }
 }
 
 /**
@@ -30,6 +34,10 @@ async function renderPosts(searchTerm) { //todo
  * @returns {Promise<void>}
  */
 async function deletePost(id) { //todo
+    await fetch("/posts/" + id, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+    });
 
     return renderPosts(undefined)
 }
